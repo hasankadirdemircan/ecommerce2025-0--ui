@@ -48,6 +48,12 @@ async function renderProductTable(productList) {
     });
 }
 
+async function updateProduct(productId) {
+    //api call backend
+    //set values to ids of elements
+    const updateProductModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("updateProductModal"));
+    updateProductModal.show();
+}
 async function addProduct() {
 
     const fileInput = document.getElementById('productImage');
