@@ -58,7 +58,7 @@ function displayProducts(products) {
     productList.innerHTML = '';
     products.forEach(product => {
         const productCard = document.createElement("div");
-        productCard.classList.add("col-md-2", "mb-4");
+        productCard.classList.add("col-md-2", "mb-4", "me-3");
 
         const productImage = document.createElement("img");
         productImage.src = BASE_IMAGE_PATH + product.image;
@@ -71,7 +71,9 @@ function displayProducts(products) {
         cardBody.innerHTML = `
             <h5 class="card-title">${product.name}</h5>
             <p class="card-text">${product.price}</p>
-            <button class="btn btn-primary" onclick='addToCart(${JSON.stringify(product)})'>Add to Cart</button>
+            <button class="btn btn-primary" onclick='addToCart(${JSON.stringify(product)})' ${product.unitsInStock === 0 ? 'disabled' : ''}>
+            ${product.unitsInStock === 0 ? 'Out of Stock' : 'Add to Cart'}
+            </button>
         `;
 
         productCard.appendChild(productImage);
