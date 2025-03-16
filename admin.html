@@ -9,174 +9,178 @@
 </head>
 
 <body>
- <!-- Navbar-->
- <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-        <a class="navbar-brand" href="#">Lala Shop</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Product</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Chart</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login.html">Logout</a>
-                </li>
-            </ul>
+    <!-- Navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">Lala Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Product</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Chart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Logout</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3>Admin Panel</h3>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>Admin Panel</h3>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                            Add Product
+                        </button>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Category Id</th>
+                                    <th>Image</th>
+                                    <th>Active</th>
+                                    <th>Process</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                <!-- Urunler buraya backedden cekilinip eklenecek(dinamik)-->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                        Add Product
-                    </button>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Category Id</th>
-                                <th>Image</th>
-                                <th>Active</th>
-                                <th>Process</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productTableBody">
-                            <!-- Urunler buraya backedden cekilinip eklenecek(dinamik)-->
-                        </tbody>
-                    </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal-->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="productName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" class="form-control" id="productPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="productUnitsInStock" required>
+                        </div>
+                        <div class="mb3">
+                            <label class="form-label">Category</label>
+                            <select name="categoryList" id="categorySelect">
+                                <!-- option backendden gelen datalar ile yazılacak.-->
+                            </select>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <label class="from-check-label">Active</label>
+                            <input type="checkbox" class="form-check-input" id="productActive" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" class="form-control" id="productImage" accept="/Image" required>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addProduct()">Add Product</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Add Product Modal-->
- <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addProductForm" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" id="productName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" id="productPrice" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="productUnitsInStock" required>
-                    </div>
-                    <div class="mb3">
-                        <label class="form-label">Category</label>
-                        <select name="categoryList" id="categorySelect">
-                            <!-- option backendden gelen datalar ile yazılacak.-->
-                        </select>
-                    </div>
-                    <div class="mb-3 form-check" >
-                        <label class="from-check-label">Active</label>
-                        <input type="checkbox" class="form-check-input" id="productActive" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Image</label>
-                        <input type="file" class="form-control" id="productImage" accept="/Image" required>
-                    </div>
-                    <button type="button" class="btn btn-primary" onclick="addProduct()">Add Product</button>
-                </form>
+    <!-- Delete Product Modal-->
+    <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog"
+        aria-labelledby="deleteProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteProductModal">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this product?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        aria-label="Close">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProduct()">Delete</button>
+                </div>
             </div>
         </div>
-    </div>
- </div>
 
- <!-- Delete Product Modal-->
- <div class="modal fade" id="deleteProductModal" tabindex="-1" role="dialog" aria-labelledby="deleteProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteProductModal">Modal title</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to delete this product?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">Close</button>
-                <button type="button" class="btn btn-danger" onclick="deleteProduct()">Delete</button>
+    </div>
+
+    <!-- Update Product Modal-->
+    <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <input type="hidden" class="form-control" id="updateProductId">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" id="updateProductName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="number" class="form-control" id="updateProductPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" id="updateProductUnitsInStock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="categoryList" id="updateCategorySelect"></select>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <label class="form-check-label">Active</label>
+                            <input type="checkbox" class="form-check-input" id="updateProductActive" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Image</label>
+                            <input type="file" class="form-control" id="updateProductImage" accept="image/*">
+                        </div>
+                        <button type="button" class="btn btn-warning" onclick="saveUpdateProduct()">Update
+                            Product</button>
+                    </form>
+                </div>
             </div>
         </div>
+
     </div>
-
- </div>
-
- <!-- Update Product Modal-->
-
-<div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateProductModalLabel">Update Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addProductForm" enctype="multipart/form-data">
-                    <div class="mb-3">
-                        <input type="hidden" class="form-control" id="updateProductId">
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control" id="updateProductName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Price</label>
-                        <input type="number" class="form-control" id="updateProductPrice" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Quantity</label>
-                        <input type="number" class="form-control" id="updateProductUnitsInStock" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Category</label>
-                        <select name="categoryList" id="updateCategorySelect"></select>
-                    </div>
-                    <div class="mb-3 form-check">
-                        <label class="form-check-label">Active</label>
-                        <input type="checkbox" class="form-check-input" id="updateProductActive" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Image</label>
-                        <input type="file" class="form-control" id="updateProductImage" accept="image/*">
-                    </div>
-                    <button type="button" class="btn btn-warning" onclick="saveUpdateProduct()">Update Product</button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-</div> 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

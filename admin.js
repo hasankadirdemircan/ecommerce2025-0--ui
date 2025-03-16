@@ -1,5 +1,5 @@
 const BASE_PATH = "http://localhost:8080/"
-const BASE_IMAGE_PATH = "C:\\Users\\hasan.demircan\\Documents\\GitHub\\ecommerce2025-0\\ecommerce\\"
+const BASE_IMAGE_PATH = "/Users/hasankadirdemircan/Desktop/ecommerce2025-0/ecommerce/"
 
 const jwt = localStorage.getItem("jwt");
 
@@ -15,14 +15,14 @@ async function getAllProduct() {
             }
         });
 
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error("failed to get products, response status : " + response.status)
         }
 
         const productList = await response.json();
-        console.log("productList : " , productList);
+        console.log("productList : ", productList);
         await renderProductTable(productList);
-    }catch (error) {
+    } catch (error) {
         console.log("error:", error)
     }
 }
@@ -33,7 +33,7 @@ async function renderProductTable(productList) {
 
     productList.forEach(product => {
         const row = productTableBody.insertRow();
-        row.innerHTML =`
+        row.innerHTML = `
         <td>${product.name}</td>
         <td>${product.price}</td>
         <td>${product.unitsInStock}</td>
@@ -49,10 +49,30 @@ async function renderProductTable(productList) {
 }
 
 async function updateProduct(productId) {
-    //api call backend
-    //set values to ids of elements
-    const updateProductModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("updateProductModal"));
-    updateProductModal.show();
+    fetch(BASE_PATH + "products/" + productId, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwt
+        }
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("get Product failed for id : " + productId, " status : " + response.status);
+        }
+        return response.json();
+    }).then(product => {
+        document.getElementById('updateProductId').value = product.id;
+        document.getElementById('updateProductName').value = product.name;
+        document.getElementById('updateProductPrice').value = product.price;
+        document.getElementById('updateProductUnitsInStock').value = product.unitsInStock;
+        renderCategorySelectOption(categories, 'updateCategorySelect');
+        document.getElementById('updateProductActive').checked = product.active;
+        const updateProductModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("updateProductModal"));
+        updateProductModal.show();
+    }).catch(error => {
+        console.error('Error', error)
+    });
+
 }
 async function addProduct() {
 
@@ -63,7 +83,7 @@ async function addProduct() {
     const productCategoryId = document.getElementById('categorySelect').value;
     const productActive = document.getElementById('productActive').checked;
 
-   
+
     const productData = {
         name: productName,
         price: productPrice,
@@ -74,7 +94,7 @@ async function addProduct() {
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0])
-    formData.append('product', new Blob([JSON.stringify(productData)], {type: 'application/json'}));
+    formData.append('product', new Blob([JSON.stringify(productData)], { type: 'application/json' }));
 
     await fetch(BASE_PATH + "products/create", {
         method: 'POST',
@@ -83,7 +103,7 @@ async function addProduct() {
         },
         body: formData
     }).then(response => {
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error("failed to add product : " + response.status);
         }
         hideModal('addProductModal');
@@ -102,7 +122,7 @@ async function getCategoryList() {
         }
     });
 
-    if(!response.ok) {
+    if (!response.ok) {
         throw new Error("Failed to get categories, response status : " + response.status);
     }
     const categoryList = await response.json();
@@ -112,7 +132,7 @@ async function getCategoryList() {
 }
 
 async function deleteProduct() {
-    if(currentId !== 0) {
+    if (currentId !== 0) {
         fetch(BASE_PATH + "products/" + currentId, {
             method: 'DELETE',
             headers: {
@@ -120,7 +140,7 @@ async function deleteProduct() {
                 'Authorization': 'Bearer ' + jwt
             }
         }).then(response => {
-            if(!response.ok) {
+            if (!response.ok) {
                 throw new Error("failed product delete, " + response.status)
             }
             hideModal("deleteProductModal");
@@ -128,6 +148,46 @@ async function deleteProduct() {
         })
     }
 }
+
+function saveUpdateProduct() {
+    const updateProductId = document.getElementById('updateProductId').value;
+    const updateProductName = document.getElementById('updateProductName').value;
+    const updateProductPrice = document.getElementById('updateProductPrice').value;
+    const updateProductUnitsInStock = document.getElementById('updateProductUnitsInStock').value;
+    const updateCategoryId = document.getElementById('updateCategorySelect').value;
+    const updateProductActive = document.getElementById('updateProductActive').checked;
+    const updateProductImage = document.getElementById('updateProductImage');
+
+    const productData = {
+        id: updateProductId,
+        name: updateProductName,
+        price: updateProductPrice,
+        unitsInStock: updateProductUnitsInStock,
+        categoryId: updateCategoryId,
+        active: updateProductActive
+    }
+
+    const formData = new FormData();
+    formData.append('file', feditedSelectImage = updateProductImage.files[0]);
+    formData.append('product', new Blob([JSON.stringify(productData)], { type: 'application/json' }));
+
+    fetch(BASE_PATH + "products/update", {
+        method: 'PUT',
+        headers: {
+            'Authorization': 'Bearer ' + jwt
+        },
+        body: formData
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error("Product update failed for id : " + updateProductId + " status : " + response.status);
+        }
+        getAllProduct();
+        const updateProductModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("updateProductModal"));
+        updateProductModal.hide();
+    })
+
+}
+
 function showDeleteProductModal(productId) {
     currentId = productId;
     const deleteProductModal = bootstrap.Modal.getOrCreateInstance(document.getElementById("deleteProductModal"));
@@ -160,7 +220,7 @@ function hideModal(modalId) {
 }
 
 
-document.addEventListener("DOMContentLoaded", async() => {
+document.addEventListener("DOMContentLoaded", async () => {
     await getAllProduct();
     await getCategoryList();
 })
