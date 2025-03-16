@@ -117,6 +117,25 @@ function updateCart() {
     });
 }
 
+function orderNow() {
+    console.log("orderNow : ", cartItems);
+    const idCountMap = new Map();
+    cartItems.forEach(item => {
+
+        //Check if the id exists in the map
+        const { id } = item;
+        if (idCountMap.has(id)) {
+            //if its exists, increment the count
+            idCountMap.set(id, idCountMap.get(id) + 1)
+        } else {
+            //if it doesn't exists, add it to the map
+            idCountMap.set(id, 1);
+        }
+    })
+
+    console.log("idCountMap: ", idCountMap)
+
+}
 function removeFromCart(index) {
     cartItems.splice(index, 1)[0];
     updateCart();
