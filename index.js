@@ -1,7 +1,9 @@
 const jwt = localStorage.getItem("jwt");
 const customerId = localStorage.getItem("customerId");
 const BASE_PATH = "http://localhost:8080/"
-const BASE_IMAGE_PATH = "/Users/hasankadirdemircan/Desktop/ecommerce2025-0/ecommerce/"
+//const BASE_IMAGE_PATH = "/Users/hasankadirdemircan/Desktop/ecommerce2025-0/ecommerce/"
+const BASE_IMAGE_PATH = "C:\\Users\\hasan.demircan\\Documents\\GitHub\\ecommerce2025-0\\ecommerce\\";
+
 let cartItems = [];
 
 
@@ -134,7 +136,38 @@ function orderNow() {
     })
 
     console.log("idCountMap: ", idCountMap)
+    var orderProductInfoList = [...idCountMap].map(([productId, quantity]) => ({productId, quantity}));
+    console.log("orderProductInfoList", orderProductInfoList)
+    fetch(BASE_PATH + "orders", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwt
+        },
+        body: JSON.stringify({
+          //  customerId: customerId,
+            customerId,
+            orderList: orderProductInfoList
+        })
+    }).then(response => {
+        if(!response.ok) {
+            throw new Error("failed order request, status code : " + response.status);
+        }
+        return response.json();
+    }).then(data => {
+        console.log(data)
+        showSuccessAlert("Ordered, Thank you!")
 
+        clearCart();
+    })
+}
+
+function clearCart() {
+    cartItems = [];
+    updateCart();
+    updateOrderButtonVisibility();
+    const categorySelect = document.getElementById("categorySelect");
+    fetchProductByCategory(categorySelect.value);
 }
 function removeFromCart(index) {
     cartItems.splice(index, 1)[0];
@@ -161,7 +194,25 @@ function updateOrderButtonVisibility() {
         document.getElementById("orderButton").style.display = "none"
     }
 }
+function showSuccessAlert(message) {
+    let alert = document.getElementById("success-order-alert")
+    alert.style.display = 'block'
+    alert.style.opacity = 1;
 
+    let alertMessage = document.getElementById("successOrderAlertMessage");
+    alertMessage.textContent = message;
+    setTimeout(() => {
+        let opacity = 1;
+        let timer = setInterval(() => {
+            if (opacity <= 0.1) {
+                clearInterval(timer);
+                alert.style.display = 'none'
+            }
+            alert.style.opacity = opacity;
+            opacity -= opacity * 0.1;
+        }, 50)
+    }, 3000);
+}
 document.addEventListener("DOMContentLoaded", async function () {
     updateOrderButtonVisibility();
 

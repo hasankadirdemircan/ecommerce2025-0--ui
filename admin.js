@@ -1,6 +1,6 @@
 const BASE_PATH = "http://localhost:8080/"
-const BASE_IMAGE_PATH = "/Users/hasankadirdemircan/Desktop/ecommerce2025-0/ecommerce/"
-
+//const BASE_IMAGE_PATH = "/Users/hasankadirdemircan/Desktop/ecommerce2025-0/ecommerce/"
+const BASE_IMAGE_PATH = "C:\\Users\\hasan.demircan\\Documents\\GitHub\\ecommerce2025-0\\ecommerce\\";
 const jwt = localStorage.getItem("jwt");
 
 var categories = [];
@@ -87,7 +87,7 @@ async function addProduct() {
     const productData = {
         name: productName,
         price: productPrice,
-        unitInStock: productUnitsInStock,
+        unitsInStock: productUnitsInStock,
         categoryId: productCategoryId,
         active: productActive
     };
